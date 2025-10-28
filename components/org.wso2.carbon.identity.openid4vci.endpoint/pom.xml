@@ -36,6 +36,7 @@
         <dependency>
             <groupId>org.wso2.carbon.identity.openid4vc</groupId>
             <artifactId>org.wso2.carbon.identity.openid4vci.metadata</artifactId>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 
