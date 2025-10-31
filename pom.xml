@@ -10,8 +10,8 @@
         <version>1.4</version>
     </parent>
 
-    <groupId>org.wso2.carbon.identity.openid4vc</groupId>
-    <artifactId>git</artifactId>
+    <groupId>org.wso2.carbon.identity.openid4vci</groupId>
+    <artifactId>identity-openid4vci</artifactId>
     <version>1.0.0-SNAPSHOT</version>
     <packaging>pom</packaging>
     <url>http://wso2.org</url>
@@ -20,6 +20,8 @@
     <description>Components for OpenID for Verifiable Credential.</description>
 
     <modules>
+        <module>components/org.wso2.carbon.identity.openid4vci.common</module>
+        <module>components/org.wso2.carbon.identity.openid4vci.credential</module>
         <module>components/org.wso2.carbon.identity.openid4vci.metadata</module>
         <module>components/org.wso2.carbon.identity.openid4vci.endpoint</module>
     </modules>
@@ -42,8 +44,18 @@
                 </exclusions>
             </dependency>
             <dependency>
-                <groupId>org.wso2.carbon.identity.openid4vc</groupId>
+                <groupId>org.wso2.carbon.identity.openid4vci</groupId>
+                <artifactId>org.wso2.carbon.identity.openid4vci.common</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.carbon.identity.openid4vci</groupId>
                 <artifactId>org.wso2.carbon.identity.openid4vci.metadata</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.carbon.identity.openid4vci</groupId>
+                <artifactId>org.wso2.carbon.identity.openid4vci.credential</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
@@ -52,9 +64,19 @@
                 <version>${carbon.identity.framework.version}</version>
             </dependency>
             <dependency>
+                <groupId>org.wso2.carbon.identity.inbound.auth.oauth2</groupId>
+                <artifactId>org.wso2.carbon.identity.oauth</artifactId>
+                <version>${carbon.identity.oauth.version}</version>
+            </dependency>
+            <dependency>
                 <groupId>com.google.code.gson</groupId>
                 <artifactId>gson</artifactId>
                 <version>${com.google.code.gson.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.orbit.com.nimbusds</groupId>
+                <artifactId>nimbus-jose-jwt</artifactId>
+                <version>${nimbusds.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -249,6 +271,9 @@
         <carbon.identity.framework.imp.pkg.version.range>[5.25.234, 8.0.0)
         </carbon.identity.framework.imp.pkg.version.range>
 
+        <carbon.identity.oauth.package.import.version.range>[6.0.0, 8.0.0)</carbon.identity.oauth.package.import.version.range>
+        <carbon.identity.oauth.version>7.0.386</carbon.identity.oauth.version>
+
         <!--Test Dependencies-->
         <junit.version>4.13.1</junit.version>
         <testng.version>7.10.1</testng.version>
@@ -260,6 +285,9 @@
         <maven.surefire.plugin.version>3.2.5</maven.surefire.plugin.version>
 
         <com.google.code.gson.version>2.9.0</com.google.code.gson.version>
+
+        <nimbusds.version>7.9.0.wso2v1</nimbusds.version>
+        <nimbusds.osgi.version.range>[7.3.0,8.0.0)</nimbusds.osgi.version.range>
 
         <osgi.framework.imp.pkg.version.range>[1.7.0, 2.0.0)</osgi.framework.imp.pkg.version.range>
         <osgi.service.component.imp.pkg.version.range>[1.2.0, 2.0.0)</osgi.service.component.imp.pkg.version.range>

@@ -5,8 +5,8 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>org.wso2.carbon.identity.openid4vc</groupId>
-        <artifactId>identity-openid4vc</artifactId>
+        <groupId>org.wso2.carbon.identity.openid4vci</groupId>
+        <artifactId>identity-openid4vci</artifactId>
         <relativePath>../../pom.xml</relativePath>
         <version>1.0.0-SNAPSHOT</version>
     </parent>
@@ -29,13 +29,29 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <version>3.1.0</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
             <groupId>org.wso2.carbon.identity.framework</groupId>
             <artifactId>org.wso2.carbon.identity.core</artifactId>
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>org.wso2.carbon.identity.openid4vc</groupId>
+            <groupId>org.wso2.carbon.identity.openid4vci</groupId>
+            <artifactId>org.wso2.carbon.identity.openid4vci.common</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.wso2.carbon.identity.openid4vci</groupId>
             <artifactId>org.wso2.carbon.identity.openid4vci.metadata</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.wso2.carbon.identity.openid4vci</groupId>
+            <artifactId>org.wso2.carbon.identity.openid4vci.credential</artifactId>
             <scope>provided</scope>
         </dependency>
     </dependencies>

@@ -5,9 +5,9 @@ import com.google.gson.JsonSyntaxException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.base.MultitenantConstants;
-import org.wso2.carbon.identity.core.ServiceURL;
-import org.wso2.carbon.identity.core.ServiceURLBuilder;
 import org.wso2.carbon.identity.core.URLBuilderException;
+import org.wso2.carbon.identity.openid4vci.common.constant.Constants;
+import org.wso2.carbon.identity.openid4vci.common.util.Util;
 import org.wso2.carbon.identity.openid4vci.metadata.exception.CredentialIssuerMetadataException;
 import org.wso2.carbon.identity.openid4vci.metadata.internal.CredentialIssuerMetadataDataHolder;
 import org.wso2.carbon.identity.openid4vci.metadata.response.CredentialIssuerMetadataResponse;
@@ -22,15 +22,11 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+
 /**
  * Default implementation for credential issuer metadata processing.
  */
 public class DefaultCredentialIssuerMetadataProcessor implements CredentialIssuerMetadataProcessor {
-
-    private static final String CONTEXT_OPENID4VCI = "oid4vci";
-    private static final String SEGMENT_CREDENTIAL = "credential";
-    private static final String SEGMENT_OAUTH2 = "oauth2";
-    private static final String SEGMENT_TOKEN = "token";
 
     private static final Log log = LogFactory.getLog(DefaultCredentialIssuerMetadataProcessor.class);
     private static final DefaultCredentialIssuerMetadataProcessor defaultCredentialIssuerMetadataProcessor =
@@ -79,26 +75,19 @@ public class DefaultCredentialIssuerMetadataProcessor implements CredentialIssue
 
     private String buildCredentialIssuerUrl(String tenantDomain) throws URLBuilderException {
 
-        return buildServiceUrl(tenantDomain, CONTEXT_OPENID4VCI).getAbsolutePublicURL();
+        return Util.buildServiceUrl(tenantDomain, Constants.CONTEXT_OPENID4VCI).getAbsolutePublicURL();
     }
 
     private String buildCredentialEndpointUrl(String tenantDomain) throws URLBuilderException {
 
-        return buildServiceUrl(tenantDomain, CONTEXT_OPENID4VCI, SEGMENT_CREDENTIAL).getAbsolutePublicURL();
+        return Util.buildServiceUrl(tenantDomain, Constants.CONTEXT_OPENID4VCI, Constants.SEGMENT_CREDENTIAL)
+                .getAbsolutePublicURL();
     }
 
     private String buildAuthorizationServerUrl(String tenantDomain) throws URLBuilderException {
 
-        return buildServiceUrl(tenantDomain, SEGMENT_OAUTH2, SEGMENT_TOKEN).getAbsolutePublicURL();
-    }
-
-    private ServiceURL buildServiceUrl(String tenantDomain, String... pathSegments) throws URLBuilderException {
-
-        ServiceURLBuilder builder = ServiceURLBuilder.create().addPath(pathSegments);
-        if (!MultitenantConstants.SUPER_TENANT_DOMAIN_NAME.equals(tenantDomain)) {
-            builder.setTenant(tenantDomain);
-        }
-        return builder.build();
+        return Util.buildServiceUrl(tenantDomain, Constants.SEGMENT_OAUTH2, Constants.SEGMENT_TOKEN)
+                .getAbsolutePublicURL();
     }
 
     protected Map<String, Object> getCredentialConfigurations(String tenantDomain)
