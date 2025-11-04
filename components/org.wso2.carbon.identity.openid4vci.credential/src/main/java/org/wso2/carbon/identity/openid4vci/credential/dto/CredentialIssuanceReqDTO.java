@@ -7,7 +7,7 @@ public class CredentialIssuanceReqDTO {
 
     private String tenantDomain;
     private String credentialConfigurationId;
-    private String scope;
+    private String token;
 
     public String getTenantDomain() {
         return tenantDomain;
@@ -25,11 +25,11 @@ public class CredentialIssuanceReqDTO {
         this.credentialConfigurationId = credentialConfigurationId;
     }
 
-    public String getScope() {
-        return scope;
+    public String getToken() {
+        return token;
     }
 
-    public void setScope(String scope) {
-        this.scope = scope;
+    public void setToken(String token) {
+        this.token = token;
     }
 }

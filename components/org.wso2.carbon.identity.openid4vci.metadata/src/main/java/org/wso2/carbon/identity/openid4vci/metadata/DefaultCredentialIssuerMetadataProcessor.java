@@ -13,7 +13,6 @@ import org.wso2.carbon.identity.openid4vci.metadata.internal.CredentialIssuerMet
 import org.wso2.carbon.identity.openid4vci.metadata.response.CredentialIssuerMetadataResponse;
 import org.wso2.carbon.identity.vc.config.management.VCCredentialConfigManager;
 import org.wso2.carbon.identity.vc.config.management.exception.VCConfigMgtException;
-import org.wso2.carbon.identity.vc.config.management.model.ClaimMapping;
 import org.wso2.carbon.identity.vc.config.management.model.VCCredentialConfiguration;
 
 import java.util.ArrayList;
@@ -21,6 +20,7 @@ import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 
 /**
@@ -113,29 +113,29 @@ public class DefaultCredentialIssuerMetadataProcessor implements CredentialIssue
 
                 // Signing algorithms
                 List<String> algValues = new ArrayList<>();
-                if (cfg.getCredentialSigningAlgValuesSupported() != null) {
-                    algValues.add(cfg.getCredentialSigningAlgValuesSupported());
+                if (cfg.getSigningAlgorithm() != null) {
+                    algValues.add(cfg.getSigningAlgorithm());
                 }
                 cfgMap.put("credential_signing_alg_values_supported", algValues);
 
-                // VCT URL
-                cfgMap.put("vct", cfg.getCredentialType());
+                // VCT
+                cfgMap.put("vct", cfg.getType());
 
                 // credential_definition: type and @context
                 Map<String, Object> credentialDefinition = new LinkedHashMap<>();
                 List<String> types = new ArrayList<>();
-                types.add(cfg.getCredentialType());
+                types.add(cfg.getType());
                 credentialDefinition.put("type", types);
                 List<String> contexts = new ArrayList<>();
-                contexts.add(cfg.getCredentialType());
+                contexts.add(cfg.getType());
                 credentialDefinition.put("@context", contexts);
                 cfgMap.put("credential_definition", credentialDefinition);
 
                 // credential_metadata: display and claims in the expected structure
                 Map<String, Object> credentialMetadata = new LinkedHashMap<>();
-                Object meta = cfg.getCredentialMetadata();
+                VCCredentialConfiguration.Metadata meta = cfg.getMetadata();
                 credentialMetadata.put("display", buildDisplay(meta));
-                credentialMetadata.put("claims", buildClaimsList(cfg.getClaimMappings()));
+                credentialMetadata.put("claims", buildClaimsList(cfg.getClaims()));
                 cfgMap.put("credential_metadata", credentialMetadata);
                 configurationsMap.put(cfg.getConfigurationId(), cfgMap);
             }
@@ -147,68 +147,31 @@ public class DefaultCredentialIssuerMetadataProcessor implements CredentialIssue
         }
     }
 
-    private Object buildDisplay(Object meta) {
+    private Object buildDisplay(VCCredentialConfiguration.Metadata meta) {
 
-        if (meta == null) {
+        if (meta == null || meta.getDisplay() == null) {
             return Collections.emptyList();
         }
         try {
-            Object display = meta.getClass().getMethod("getDisplay").invoke(meta);
-            if (display == null) {
-                return Collections.emptyList();
-            }
-            // If the display is persisted as a JSON string, parse and return as-is
-            if (display instanceof String) {
-                String json = (String) display;
-                try {
-                    return new Gson().fromJson(json, Object.class);
-                } catch (JsonSyntaxException e) {
-                    if (log.isDebugEnabled()) {
-                        log.debug("Invalid JSON in credential metadata display; returning empty list. JSON: "
-                                + json, e);
-                    }
-                    return Collections.emptyList();
-                }
-            }
-            // If already a List/Map structure, return directly without reshaping
-            if (display instanceof List || display instanceof Map) {
-                return display;
-            }
-            // Fallback
-            return Collections.emptyList();
-        } catch (ReflectiveOperationException e) {
+            return new Gson().fromJson(meta.getDisplay(), Object.class);
+        } catch (JsonSyntaxException e) {
             if (log.isDebugEnabled()) {
-                log.debug("Unable to access display from credential metadata; returning empty list.", e);
+                log.debug("Invalid JSON in credential metadata display; returning empty list. JSON: "
+                        + meta.getDisplay(), e);
             }
             return Collections.emptyList();
         }
     }
 
-    private List<Map<String, Object>> buildClaimsList(List<ClaimMapping> claimMappings) {
+    private List<Map<String, Object>> buildClaimsList(List<String> claims) {
 
-        if (claimMappings == null) {
+        if (claims == null) {
             return Collections.emptyList();
         }
-        List<Map<String, Object>> result = new ArrayList<>();
-        for (ClaimMapping claimMapping: claimMappings) {
-            Map<String, Object> cmMap = new LinkedHashMap<>();
-
-            List<String> pathList = new ArrayList<>();
-            pathList.add(claimMapping.getClaimURI());
-            cmMap.put("path", pathList);
-
-            List<Map<String, Object>> display = new ArrayList<>();
-            if (claimMapping.getDisplay() != null) {
-                Map<String, Object> diMap = new LinkedHashMap<>();
-                diMap.put("name", claimMapping.getDisplay());
-                display.add(diMap);
-                cmMap.put("display", display);
-            }
-
-            if (!cmMap.isEmpty()) {
-                result.add(cmMap);
-            }
-        }
-        return result;
+        return claims.stream().map(claim -> {
+                    Map<String, Object> claimMap = new LinkedHashMap<>();
+                    claimMap.put("path", Collections.singletonList(claim));
+                    return claimMap;
+                }).collect(Collectors.toList());
     }
 }

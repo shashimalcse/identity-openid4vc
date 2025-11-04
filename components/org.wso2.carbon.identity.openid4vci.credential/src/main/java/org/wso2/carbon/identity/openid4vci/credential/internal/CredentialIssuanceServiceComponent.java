@@ -8,6 +8,8 @@ import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.component.annotations.ReferenceCardinality;
 import org.osgi.service.component.annotations.ReferencePolicy;
+import org.wso2.carbon.identity.oauth.tokenprocessor.TokenProvider;
+import org.wso2.carbon.identity.oauth2.internal.OAuth2ServiceComponentHolder;
 import org.wso2.carbon.identity.openid4vci.credential.CredentialIssuanceService;
 import org.wso2.carbon.identity.openid4vci.credential.issuer.handlers.format.CredentialFormatHandler;
 import org.wso2.carbon.identity.openid4vci.credential.issuer.handlers.format.impl.JwtVcJsonFormatHandler;
@@ -77,5 +79,28 @@ public class CredentialIssuanceServiceComponent {
             log.debug("Removing the CredentialFormatHandler Service : " + credentialFormatHandler.getFormat());
         }
         CredentialIssuanceDataHolder.getInstance().removeCredentialFormatHandler(credentialFormatHandler);
+    }
+
+    @Reference(
+            name = "token.provider",
+            service = TokenProvider.class,
+            cardinality = ReferenceCardinality.OPTIONAL,
+            policy = ReferencePolicy.DYNAMIC,
+            unbind = "unsetTokenProvider"
+    )
+    protected void setTokenProvider(TokenProvider tokenProvider) {
+
+        if (log.isDebugEnabled()) {
+            log.debug("Setting token provider.");
+        }
+        OAuth2ServiceComponentHolder.getInstance().setTokenProvider(tokenProvider);
+    }
+
+    protected void unsetTokenProvider(TokenProvider tokenProvider) {
+
+        if (log.isDebugEnabled()) {
+            log.debug("Unset token provider.");
+        }
+        OAuth2ServiceComponentHolder.getInstance().setTokenProvider(null);
     }
 }
