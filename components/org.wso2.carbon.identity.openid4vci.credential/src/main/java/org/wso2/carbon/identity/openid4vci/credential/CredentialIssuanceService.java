@@ -1,7 +1,5 @@
 package org.wso2.carbon.identity.openid4vci.credential;
 
-import com.nimbusds.jwt.JWTClaimsSet;
-import com.nimbusds.jwt.SignedJWT;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.identity.application.authentication.framework.model.AuthenticatedUser;
@@ -50,10 +48,7 @@ public class CredentialIssuanceService {
             throw new CredentialIssuanceException("VC credential configuration manager is not available");
         }
 
-        SignedJWT signedJWT;
-        JWTClaimsSet claimsSet;
-
-        AccessTokenDO accessTokenDO = null;
+        AccessTokenDO accessTokenDO;
         try {
             accessTokenDO = CredentialIssuanceDataHolder.getInstance().getTokenProvider()
                     .getVerifiedAccessToken(reqDTO.getToken(), false);
@@ -71,6 +66,7 @@ public class CredentialIssuanceService {
                             .equals(reqDTO.getCredentialConfigurationId())).findFirst().orElseThrow(() ->
                             new CredentialIssuanceException("unknown credential configuration: No matching " +
                                     "credential configuration found for ID: " + reqDTO.getCredentialConfigurationId()));
+            credentialConfiguration = configManager.get(credentialConfiguration.getId(), reqDTO.getTenantDomain());
 
             // Validate scope - check if the required scope exists in JWT token
             validateScope(scopes, credentialConfiguration.getScope());

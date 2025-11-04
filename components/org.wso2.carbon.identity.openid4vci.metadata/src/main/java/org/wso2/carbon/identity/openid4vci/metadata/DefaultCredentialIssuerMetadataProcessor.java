@@ -104,40 +104,42 @@ public class DefaultCredentialIssuerMetadataProcessor implements CredentialIssue
             }
 
             for (VCCredentialConfiguration cfg : configurations) {
+                VCCredentialConfiguration configuration = configManager.get(cfg.getId(),
+                        tenantDomain);
                 Map<String, Object> cfgMap = new LinkedHashMap<>();
 
                 // Basic fields
-                cfgMap.put("id", cfg.getConfigurationId());
-                cfgMap.put("format", cfg.getFormat());
-                cfgMap.put("scope", cfg.getScope());
+                cfgMap.put("id", configuration.getConfigurationId());
+                cfgMap.put("format", configuration.getFormat());
+                cfgMap.put("scope", configuration.getScope());
 
                 // Signing algorithms
                 List<String> algValues = new ArrayList<>();
-                if (cfg.getSigningAlgorithm() != null) {
-                    algValues.add(cfg.getSigningAlgorithm());
+                if (configuration.getSigningAlgorithm() != null) {
+                    algValues.add(configuration.getSigningAlgorithm());
                 }
                 cfgMap.put("credential_signing_alg_values_supported", algValues);
 
                 // VCT
-                cfgMap.put("vct", cfg.getType());
+                cfgMap.put("vct", configuration.getType());
 
                 // credential_definition: type and @context
                 Map<String, Object> credentialDefinition = new LinkedHashMap<>();
                 List<String> types = new ArrayList<>();
-                types.add(cfg.getType());
+                types.add(configuration.getType());
                 credentialDefinition.put("type", types);
                 List<String> contexts = new ArrayList<>();
-                contexts.add(cfg.getType());
+                contexts.add(configuration.getType());
                 credentialDefinition.put("@context", contexts);
                 cfgMap.put("credential_definition", credentialDefinition);
 
                 // credential_metadata: display and claims in the expected structure
                 Map<String, Object> credentialMetadata = new LinkedHashMap<>();
-                VCCredentialConfiguration.Metadata meta = cfg.getMetadata();
+                VCCredentialConfiguration.Metadata meta = configuration.getMetadata();
                 credentialMetadata.put("display", buildDisplay(meta));
-                credentialMetadata.put("claims", buildClaimsList(cfg.getClaims()));
+                credentialMetadata.put("claims", buildClaimsList(configuration.getClaims()));
                 cfgMap.put("credential_metadata", credentialMetadata);
-                configurationsMap.put(cfg.getConfigurationId(), cfgMap);
+                configurationsMap.put(configuration.getConfigurationId(), cfgMap);
             }
 
             return configurationsMap;

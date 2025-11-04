@@ -71,7 +71,7 @@ public class JwtVcJsonFormatHandler implements CredentialFormatHandler {
         Instant now = Instant.now();
 
         // Calculate validUntil using expiryInSeconds from VCCredentialConfiguration
-        int expiryIn = credentialIssuerContext.getCredentialConfiguration().getExpiryIn();
+        int expiryIn = credentialIssuerContext.getCredentialConfiguration().getExpiresIn();
         Instant validUntil = now.plusSeconds(expiryIn);
 
         // Build Verifiable Credential structure as the JWT payload directly

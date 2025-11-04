@@ -24,6 +24,10 @@
         <module>components/org.wso2.carbon.identity.openid4vci.credential</module>
         <module>components/org.wso2.carbon.identity.openid4vci.metadata</module>
         <module>components/org.wso2.carbon.identity.openid4vci.endpoint</module>
+        <module>features/org.wso2.carbon.identity.openid4vci.common.server.feature</module>
+        <module>features/org.wso2.carbon.identity.openid4vci.credential.server.feature</module>
+        <module>features/org.wso2.carbon.identity.openid4vci.metadata.server.feature</module>
+        <module>features/org.wso2.carbon.identity.openid4vci.endpoint.server.feature</module>
     </modules>
 
     <dependencyManagement>
@@ -64,6 +68,11 @@
                 <version>${carbon.identity.framework.version}</version>
             </dependency>
             <dependency>
+                <groupId>org.wso2.carbon.identity.framework</groupId>
+                <artifactId>org.wso2.carbon.identity.application.authentication.framework</artifactId>
+                <version>${carbon.identity.framework.version}</version>
+            </dependency>
+            <dependency>
                 <groupId>org.wso2.carbon.identity.inbound.auth.oauth2</groupId>
                 <artifactId>org.wso2.carbon.identity.oauth</artifactId>
                 <version>${carbon.identity.oauth.version}</version>
@@ -71,6 +80,11 @@
             <dependency>
                 <groupId>org.wso2.carbon</groupId>
                 <artifactId>org.wso2.carbon.user.core</artifactId>
+                <version>${carbon.kernel.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.carbon</groupId>
+                <artifactId>org.wso2.carbon.utils</artifactId>
                 <version>${carbon.kernel.version}</version>
             </dependency>
             <dependency>
