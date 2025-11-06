@@ -78,11 +78,18 @@ public class JwtVcJsonFormatHandler implements CredentialFormatHandler {
         Map<String, Object> vcStructure = buildVerifiableCredential(credentialIssuerContext, issuerUrl, now,
                 validUntil);
 
-        // Create JWT claims from the VC structure (no typical JWT claims like iss, jti, iat, etc.)
+        // Create JWT claims with standard JWT claims and VC structure under "vc" claim
         JWTClaimsSet.Builder jwtClaimsSetBuilder = new JWTClaimsSet.Builder();
-        for (Map.Entry<String, Object> entry : vcStructure.entrySet()) {
-            jwtClaimsSetBuilder.claim(entry.getKey(), entry.getValue());
-        }
+
+        // Standard JWT claims
+        jwtClaimsSetBuilder.issuer(issuerUrl);
+        jwtClaimsSetBuilder.jwtID(UUID.randomUUID().toString());
+        jwtClaimsSetBuilder.issueTime(java.util.Date.from(now));
+        jwtClaimsSetBuilder.notBeforeTime(java.util.Date.from(now));
+        jwtClaimsSetBuilder.expirationTime(java.util.Date.from(validUntil));
+
+        // VC structure as a claim
+        jwtClaimsSetBuilder.claim("vc", vcStructure);
 
         return jwtClaimsSetBuilder.build();
     }
@@ -113,7 +120,7 @@ public class JwtVcJsonFormatHandler implements CredentialFormatHandler {
         vc.put("@context", context);
 
         // id - unique identifier for this credential
-        vc.put("id", "urn:uuid:" + UUID.randomUUID());
+        vc.put("id", UUID.randomUUID().toString());
 
         // type array
         List<String> types = new ArrayList<>();
