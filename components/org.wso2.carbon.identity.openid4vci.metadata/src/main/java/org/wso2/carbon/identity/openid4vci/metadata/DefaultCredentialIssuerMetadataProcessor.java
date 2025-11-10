@@ -109,7 +109,7 @@ public class DefaultCredentialIssuerMetadataProcessor implements CredentialIssue
                 Map<String, Object> cfgMap = new LinkedHashMap<>();
 
                 // Basic fields
-                cfgMap.put("id", configuration.getConfigurationId());
+                cfgMap.put("id", configuration.getIdentifier());
                 cfgMap.put("format", configuration.getFormat());
                 cfgMap.put("scope", configuration.getScope());
 
@@ -120,26 +120,13 @@ public class DefaultCredentialIssuerMetadataProcessor implements CredentialIssue
                 }
                 cfgMap.put("credential_signing_alg_values_supported", algValues);
 
-                // VCT
-                cfgMap.put("vct", configuration.getType());
-
-                // credential_definition: type and @context
-                Map<String, Object> credentialDefinition = new LinkedHashMap<>();
-                List<String> types = new ArrayList<>();
-                types.add(configuration.getType());
-                credentialDefinition.put("type", types);
-                List<String> contexts = new ArrayList<>();
-                contexts.add(configuration.getType());
-                credentialDefinition.put("@context", contexts);
-                cfgMap.put("credential_definition", credentialDefinition);
-
                 // credential_metadata: display and claims in the expected structure
                 Map<String, Object> credentialMetadata = new LinkedHashMap<>();
                 VCCredentialConfiguration.Metadata meta = configuration.getMetadata();
                 credentialMetadata.put("display", buildDisplay(meta));
                 credentialMetadata.put("claims", buildClaimsList(configuration.getClaims()));
                 cfgMap.put("credential_metadata", credentialMetadata);
-                configurationsMap.put(configuration.getConfigurationId(), cfgMap);
+                configurationsMap.put(configuration.getIdentifier(), cfgMap);
             }
 
             return configurationsMap;

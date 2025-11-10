@@ -62,7 +62,7 @@ public class CredentialIssuanceService {
         try {
             List<VCCredentialConfiguration> credentialConfigurations = configManager.list(reqDTO.getTenantDomain());
             VCCredentialConfiguration credentialConfiguration = credentialConfigurations.stream()
-                    .filter(config -> config.getConfigurationId()
+                    .filter(config -> config.getIdentifier()
                             .equals(reqDTO.getCredentialConfigurationId())).findFirst().orElseThrow(() ->
                             new CredentialIssuanceException("unknown credential configuration: No matching " +
                                     "credential configuration found for ID: " + reqDTO.getCredentialConfigurationId()));
