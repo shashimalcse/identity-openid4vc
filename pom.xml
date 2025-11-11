@@ -23,10 +23,12 @@
         <module>components/org.wso2.carbon.identity.openid4vci.common</module>
         <module>components/org.wso2.carbon.identity.openid4vci.credential</module>
         <module>components/org.wso2.carbon.identity.openid4vci.metadata</module>
+        <module>components/org.wso2.carbon.identity.openid4vci.offer</module>
         <module>components/org.wso2.carbon.identity.openid4vci.endpoint</module>
         <module>features/org.wso2.carbon.identity.openid4vci.common.server.feature</module>
         <module>features/org.wso2.carbon.identity.openid4vci.credential.server.feature</module>
         <module>features/org.wso2.carbon.identity.openid4vci.metadata.server.feature</module>
+        <module>features/org.wso2.carbon.identity.openid4vci.offer.server.feature</module>
         <module>features/org.wso2.carbon.identity.openid4vci.endpoint.server.feature</module>
     </modules>
 
@@ -55,6 +57,11 @@
             <dependency>
                 <groupId>org.wso2.carbon.identity.openid4vci</groupId>
                 <artifactId>org.wso2.carbon.identity.openid4vci.metadata</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.carbon.identity.openid4vci</groupId>
+                <artifactId>org.wso2.carbon.identity.openid4vci.offer</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>

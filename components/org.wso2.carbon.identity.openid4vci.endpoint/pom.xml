@@ -51,6 +51,11 @@
         </dependency>
         <dependency>
             <groupId>org.wso2.carbon.identity.openid4vci</groupId>
+            <artifactId>org.wso2.carbon.identity.openid4vci.offer</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.wso2.carbon.identity.openid4vci</groupId>
             <artifactId>org.wso2.carbon.identity.openid4vci.credential</artifactId>
             <scope>provided</scope>
         </dependency>

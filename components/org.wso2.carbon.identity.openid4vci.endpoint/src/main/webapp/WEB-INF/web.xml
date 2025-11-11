@@ -81,7 +81,8 @@
             <param-name>jaxrs.serviceClasses</param-name>
             <param-value>
                 org.wso2.carbon.identity.openid4vci.endpoint.metadata.MetadataEndpoint,
-                org.wso2.carbon.identity.openid4vci.endpoint.credential.CredentialEndpoint
+                org.wso2.carbon.identity.openid4vci.endpoint.credential.CredentialEndpoint,
+                org.wso2.carbon.identity.openid4vci.endpoint.offer.OfferEndpoint
             </param-value>
         </init-param>
         <init-param>
